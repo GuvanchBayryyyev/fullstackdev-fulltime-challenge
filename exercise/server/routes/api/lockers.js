@@ -13,7 +13,11 @@ router.get('/', async (req, res)=> {
 router.post('/', async (req, res)=> {
     const lockers = await loadLockersCollection()
     await lockers.insertOne({
-        text: req.body.text,
+        unit: req.body.unit,
+        size: req.body.size,
+        firstprice: req.body.firstprice,
+        nextprice: req.body.nextprice,
+        chosen: req.body.chosen,
         createdAt: new Date()
     });
     res.status(201).send();
