@@ -9,6 +9,11 @@ router.get('/', async (req, res)=> {
     res.send(await lockers.find({}).toArray())
     
 })
+//Get by id
+router.get('/:id', async (req, res)=> {
+    const lockers = await loadLockersCollection()
+    res.send(await lockers.findOne({_id:new mongodb.ObjectID(req.params.id) }))
+})
 //Post Locking
 router.post('/', async (req, res)=> {
     const lockers = await loadLockersCollection()
@@ -17,10 +22,28 @@ router.post('/', async (req, res)=> {
         size: req.body.size,
         firstprice: req.body.firstprice,
         nextprice: req.body.nextprice,
-        chosen: req.body.chosen,
-        createdAt: new Date()
+        status: req.body.status,
+        payment: req.body.payment,
+        password: null,
+        lockedAt: null
     });
     res.status(201).send();
+})
+//Update Locking
+router.put('/:id', async (req, res) => {
+    const lockers = await loadLockersCollection()
+    await lockers.save({ 
+        _id: new mongodb.ObjectID(req.params.id),
+        unit: req.body.unit,
+        size: req.body.size,
+        firstprice: req.body.firstprice,
+        nextprice: req.body.nextprice,
+        status: req.body.status,
+        payment: req.body.payment,
+        password: req.body.password,
+        lockedDate: new Date()
+     });
+    res.status(200).send();
 })
 //Delete Locking
 router.delete('/:id', async (req, res) => {
